@@ -4,6 +4,15 @@ Uma palavra pode abrir uma nova possibilidade. **Word by Word** é um site para 
 
 Projeto da disciplina **Front-end Engineering — FIAP**.
 
+
+## Links do projeto
+
+- [Site](https://wordbyword-fiap-victor-marjorie.pink-peach-7262.chatgpt.site)
+- [Frontend no GitHub](https://github.com/victornunes-eng/wordbyword-frontend)
+- [API no GitHub](https://github.com/victornunes-eng/wordbyword-api)
+- [Endpoint público de palavras](https://wordbyword-api.vercel.app/ask)
+- [Saúde da API](https://wordbyword-api.vercel.app/health)
+
 ## Integrantes
 
 | Integrante | RM |
