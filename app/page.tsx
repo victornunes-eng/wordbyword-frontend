@@ -65,7 +65,7 @@ export default function Home() {
     <div className="site-shell">
       <a className="skip-link" href="#words">Pular para as palavras</a>
       <header className="site-header">
-        <a href="/" className="brand" aria-label="Word by Word — início"><span className="brand-mark">w.</span><span>word<span className="brand-light">by</span>word</span></a>
+        <a href="/" className="brand"><span className="brand-mark" aria-hidden="true">w.</span><span>word<span className="brand-light">by</span>word</span></a>
         <span className="header-note"><span className="status-dot" />Seu inglês, uma palavra por vez.</span>
         <span className="language-tag">EN <ArrowRight size={14} aria-hidden="true" /> PT</span>
       </header>

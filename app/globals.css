@@ -1,6 +1,9 @@
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+@source './';
+@source '../components/ui/button.tsx';
+@source '../components/ui/skeleton.tsx';
 @theme inline { --color-background: var(--background); --color-foreground: var(--foreground); --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground); --color-muted: var(--muted); --color-muted-foreground: var(--muted-foreground); --color-border: var(--border); --color-ring: var(--ring); --font-sans: Arial, Helvetica, sans-serif; }
 :root { --background:#f6f8fb; --foreground:#142b40; --primary:#174bdf; --primary-foreground:#fff; --muted:#e7edf5; --muted-foreground:#526477; --border:#dce3ec; --ring:#174bdf; --radius:.75rem; }
 * { box-sizing:border-box; }

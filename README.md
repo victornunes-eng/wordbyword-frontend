@@ -7,7 +7,8 @@ Projeto da disciplina **Front-end Engineering — FIAP**.
 
 ## Links do projeto
 
-- [Site](https://wordbyword-fiap-victor-marjorie.pink-peach-7262.chatgpt.site)
+- [Site principal na Vercel](https://wordbyword-frontend.vercel.app)
+- [Publicação alternativa no Sites](https://wordbyword-fiap-victor-marjorie.victornunesdev.chatgpt.site)
 - [Frontend no GitHub](https://github.com/victornunes-eng/wordbyword-frontend)
 - [API no GitHub](https://github.com/victornunes-eng/wordbyword-api)
 - [Endpoint público de palavras](https://wordbyword-api.vercel.app/ask)
@@ -39,7 +40,8 @@ Projeto da disciplina **Front-end Engineering — FIAP**.
 | Tailwind CSS + CSS próprio | Estilos e layout responsivo. |
 | Shadcn / Base UI | Botões e esqueletos de carregamento. |
 | Lucide | Ícones de interface. |
-| Sites / Cloudflare Workers | Publicação do frontend. |
+| Vercel | Publicação estática principal do frontend e hospedagem da API. |
+| Sites / Cloudflare Workers | Publicação alternativa do mesmo frontend. |
 | Node.js + OpenAI | API própria, mantida em repositório separado. |
 
 O frontend não recebe a chave da OpenAI. Ele conhece apenas o endereço público da API.
@@ -74,19 +76,39 @@ npm start
 
 `npm start` executa localmente o Worker compilado com Wrangler. O comando de build gera `dist/client` e `dist/server`; não publique `dist/server` como arquivos estáticos.
 
-## Publicar
+## Publicar na Vercel
 
-O frontend foi preparado para **Sites**, que executa o resultado da compilação no Cloudflare Workers.
+1. Importe este repositório na Vercel com o framework **Vite**.
+2. Defina `NEXT_PUBLIC_API_URL=https://wordbyword-api.vercel.app/ask` nas variáveis de produção.
+3. A configuração `vercel.json` executa `npm run build:vercel` e publica a pasta `build`.
+4. Realize o deploy em produção e confirme que o endereço está acessível sem login.
+5. Na API, mantenha a origem pública do frontend em `ALLOWED_ORIGINS`.
 
-1. Defina `NEXT_PUBLIC_API_URL` com o endereço público completo da sua API (`https://seu-projeto.vercel.app/ask`) no ambiente de compilação.
-2. Execute `npm ci` e `npm run build`.
-3. Salve e publique a versão pelo Sites. O identificador da instância está em `.openai/hosting.json`.
-4. Configure o acesso público para que o professor consiga abrir a página sem login.
-5. Confirme que a origem do site está em `ALLOWED_ORIGINS` na API e valide uma consulta real.
+Pela CLI:
 
-A variável `NEXT_PUBLIC_API_URL` é incorporada ao JavaScript na compilação. Alterá-la exige novo build e deploy. Nunca use prefixo `NEXT_PUBLIC_` para segredos.
+```bash
+npx vercel login
+npx vercel link
+npx vercel env add NEXT_PUBLIC_API_URL production
+npx vercel --prod
+```
 
-Para uma nova instância em outra conta do Sites, registre um novo site e use o identificador retornado; o identificador deste projeto não transfere acesso à conta original. Não é necessário usar a Vercel para o frontend: ela hospeda a API separadamente.
+A variável é pública e incorporada ao JavaScript na compilação. Alterá-la exige novo build e deploy. Nunca use prefixo `NEXT_PUBLIC_` para segredos. A pasta `api/` deste ambiente local é um repositório independente e está excluída do Git e do upload do frontend.
+
+Para conferir a versão estática localmente:
+
+```bash
+npm run build:vercel
+npm run preview:vercel
+```
+
+### Publicação alternativa no Sites
+
+A mesma interface também pode ser compilada com `npm run build` e publicada no Sites, sobre Cloudflare Workers. O identificador está em `.openai/hosting.json`. Defina `NEXT_PUBLIC_API_URL` antes do build, salve a versão e publique com acesso público. Essa compilação produz `dist/client` e `dist/server`; não sirva os arquivos do servidor como estáticos.
+
+A versão principal usa Vercel para reduzir o impacto de scripts da hospedagem identificado na primeira medição. As duas compilações reutilizam `app/page.tsx` e `app/globals.css`; não há duas implementações da interface.
+
+Para uma instância em outra conta do Sites, registre um novo site e use o identificador retornado. O identificador deste projeto não transfere acesso à conta original.
 
 ## Estrutura
 
@@ -96,13 +118,52 @@ app/layout.tsx        Idioma e metadados
 app/globals.css       Identidade visual e responsividade
 components/ui/        Componentes de interface do scaffold
 public/favicon.svg    Ícone do projeto
+browser.tsx           Entrada da versão estática
+vite.vercel.config.ts Compilação estática para Vercel
+vercel.json           Configuração de publicação
 .env.example          Exemplo de configuração, sem segredos
 docs/                 Evidências e documentação da entrega
 ```
 
 ## Lighthouse e Web Vitals
 
-A evidência e os resultados da versão pública serão registrados em `docs/` após a publicação. Nenhuma pontuação foi estimada ou inventada.
+Auditoria realizada em **07/09/2026**, com **Lighthouse 13.4.1**, sobre [a versão pública na Vercel](https://wordbyword-frontend.vercel.app/). Perfil móvel às 15h51 e desktop às 15h52 (horário de Brasília), com as configurações padrão de cada perfil e Chrome headless sem extensões. As duas execuções terminaram sem avisos ou erros de auditoria.
+
+| Perfil | Desempenho | Acessibilidade | Boas práticas | SEO |
+| --- | ---: | ---: | ---: | ---: |
+| Móvel | **99** | **100** | **100** | **100** |
+| Desktop | **100** | **100** | **100** | **100** |
+
+| Métrica | Móvel | Desktop |
+| --- | ---: | ---: |
+| FCP | 1,3 s | 0,3 s |
+| LCP | 1,3 s | 0,3 s |
+| Speed Index | 3,0 s | 0,9 s |
+| TBT | 0 ms | 0 ms |
+| CLS | 0 | 0 |
+
+### Prints e relatórios originais
+
+![Lighthouse móvel: desempenho 99; acessibilidade, boas práticas e SEO 100](docs/lighthouse-mobile.png)
+
+![Lighthouse desktop: 100 em desempenho, acessibilidade, boas práticas e SEO](docs/lighthouse-desktop.png)
+
+- [Relatório móvel em HTML](docs/lighthouse-mobile.report.html) e [dados originais em JSON](docs/lighthouse-mobile.report.json).
+- [Relatório desktop em HTML](docs/lighthouse-desktop.report.html) e [dados originais em JSON](docs/lighthouse-desktop.report.json).
+- [PDF de entrega para a FIAP](docs/entrega-fiap.pdf).
+
+Para abrir os relatórios interativos, baixe o HTML pelo botão **Raw/Download** do GitHub e abra no navegador. Os prints acima permitem conferir as notas diretamente no README.
+
+### Como reproduzir
+
+Com Google Chrome instalado, execute na raiz do repositório:
+
+```bash
+npx --yes lighthouse@13.4.1 https://wordbyword-frontend.vercel.app --chrome-flags="--headless=new --disable-extensions" --output=html --output=json --output-path=./docs/lighthouse-mobile
+npx --yes lighthouse@13.4.1 https://wordbyword-frontend.vercel.app --preset=desktop --chrome-flags="--headless=new --disable-extensions" --output=html --output=json --output-path=./docs/lighthouse-desktop
+```
+
+### O significado de cada métrica
 
 | Métrica | O que significa |
 | --- | --- |
@@ -114,7 +175,7 @@ A evidência e os resultados da versão pública serão registrados em `docs/` a
 
 **Lighthouse é uma medição de laboratório.** Os Core Web Vitals atuais são LCP, INP e CLS. O relatório padrão de navegação não comprova o INP de usuários reais; TBT ajuda a diagnosticar bloqueios, mas não é o mesmo que INP. As notas variam com dispositivo, rede e execução. Um site novo pode não ter dados de campo suficientes.
 
-Medidas adotadas: fontes do sistema sem downloads externos, ausência de imagens pesadas, ícones vetoriais, CSS responsivo e espaços reservados durante a consulta.
+Medidas adotadas: fontes do sistema sem downloads externos, ausência de imagens pesadas, ícones vetoriais, CSS gerado somente para os componentes usados, publicação estática na Vercel e espaços reservados durante a consulta.
 
 - [Google — Lighthouse performance scoring](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring)
 - [Google — Web Vitals](https://web.dev/articles/vitals)

@@ -1,0 +1,12 @@
+api/
+.git/
+.env*
+work/
+docs/
+.openai/
+dist/
+node_modules/
+build/
+.wrangler/
+.vinext/
+*.tsbuildinfo

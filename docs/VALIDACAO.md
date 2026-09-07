@@ -14,7 +14,11 @@ A avaliação combina testes automatizados da API, compilação e verificação 
 
 ## Limitações de validação
 
-A interface foi aberta e inspecionada no Chrome via controle do aplicativo nativo, após a prévia integrada não estar disponível. Os testes adicionais e o Lighthouse são descritos abaixo conforme forem concluídos.
+A interface foi aberta e inspecionada no Chrome via controle do aplicativo nativo. A busca foi acionada e atualizou os cinco cartões. A apresentação do cabeçalho também foi conferida com zoom de 200%; isso não representa um teste completo de todos os controles nesse zoom.
+
+Em 07/09/2026, a URL pública `https://wordbyword-frontend.vercel.app/` foi auditada com Lighthouse 13.4.1 em perfis móvel e desktop, sem erros de execução. O perfil móvel obteve 99 em desempenho e 100 em acessibilidade, boas práticas e SEO. O desktop obteve 100 nas quatro categorias. Os relatórios HTML/JSON e os prints originais estão nesta pasta. A consulta pública da API, com a origem da Vercel, retornou cinco palavras válidas com explicação em português e exemplo em inglês.
+
+Os testes automatizados não substituem uma avaliação manual completa com leitores de tela, aparelhos físicos e diferentes navegadores.
 
 Há integração opcional e detectável com WebMCP para a mesma ação de buscar palavras. O ambiente não disponibilizou um contexto WebMCP para execução dos testes dessa integração; seu contrato não foi verificado em navegador compatível. A função principal do site não depende dela.
 
